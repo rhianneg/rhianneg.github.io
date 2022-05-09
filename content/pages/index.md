@@ -13,10 +13,7 @@ sections:
     colors: colors-f
     backgroundSize: full
     title: 'Hello, I’m Rhianne Gonsalves'
-    subtitle: >-
-      This is my info—I’m sharing it all this with ya’ll to impress you with all
-      the hard work I’ve done in the past few years. Once you’re impressed, you
-      can continue to scroll down to see more details and credentials about me.
+    subtitle: 'a developer, data Enthusiast, runner, and'
     styles:
       self:
         height: auto

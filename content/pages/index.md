@@ -42,7 +42,7 @@ sections:
     type: HeroSection
     actions:
       - type: Button
-        label: Learn more
+        label: My Projects
         altText: ''
         url: /
         showIcon: false

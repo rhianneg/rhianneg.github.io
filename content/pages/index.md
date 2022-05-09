@@ -54,7 +54,7 @@ sections:
         altText: ''
         url: www.linkedin.com/in/rhianne-gonsalves
         showIcon: false
-        icon: arrowRight
+        icon: linkedin
         iconPosition: right
         style: primary
         elementId: ''

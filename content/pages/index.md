@@ -51,7 +51,6 @@ sections:
         style: primary
         elementId: ''
       - type: Button
-        label: Learn more
         altText: ''
         url: www.linkedin.com/in/rhianne-gonsalves
         showIcon: false

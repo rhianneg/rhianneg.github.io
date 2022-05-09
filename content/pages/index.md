@@ -56,7 +56,7 @@ sections:
         showIcon: false
         icon: linkedin
         iconPosition: right
-        style: secondary
+        style: primary
         elementId: ''
   - colors: colors-f
     type: FeaturedProjectsSection

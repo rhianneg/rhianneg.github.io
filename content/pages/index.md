@@ -50,13 +50,6 @@ sections:
         iconPosition: right
         style: primary
         elementId: ''
-      - type: Link
-        altText: ''
-        url: /
-        showIcon: false
-        icon: arrowRight
-        iconPosition: right
-        elementId: ''
   - colors: colors-f
     type: FeaturedProjectsSection
     elementId: ''

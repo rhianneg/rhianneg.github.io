@@ -52,7 +52,7 @@ sections:
         elementId: ''
       - type: Button
         altText: ''
-        url: www.linkedin.com/in/rhianne-gonsalves
+        url: /www.linkedin.com/in/rhianne-gonsalves
         showIcon: true
         icon: linkedin
         iconPosition: right

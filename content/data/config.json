@@ -3,7 +3,7 @@
     "favicon": "/images/favicon.svg",
     "header": {
         "headerVariant": "variant-c",
-        "isSticky": false,
+        "isSticky": true,
         "title": "Personal",
         "isTitleVisible": true,
         "primaryLinks": [
@@ -85,7 +85,12 @@
         "styles": {
             "self": {
                 "width": "narrow",
-                "padding": ["pt-16", "pb-16", "pr-4", "pl-4"]
+                "padding": [
+                    "pt-16",
+                    "pb-16",
+                    "pr-4",
+                    "pl-4"
+                ]
             }
         }
     }

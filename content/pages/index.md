@@ -10,7 +10,7 @@ backgroundImage:
   opacity: 75
 sections:
   - elementId: ''
-    colors: colors-e
+    colors: colors-f
     backgroundSize: full
     title: 'Hello, I’m Rhianne Gonsalves'
     subtitle: 'A Developer, Data Enthusiast, Runner, and Creative.'

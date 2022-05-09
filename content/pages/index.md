@@ -53,7 +53,7 @@ sections:
       - type: Button
         altText: ''
         url: www.linkedin.com/in/rhianne-gonsalves
-        showIcon: false
+        showIcon: true
         icon: linkedin
         iconPosition: right
         style: primary

@@ -3,7 +3,6 @@ title: Home
 layout: PageLayout
 colors: colors-a
 backgroundImage:
-  url: /images/angus-gray-uddLAOOUcIk-unsplash.jpg
   backgroundSize: cover
   backgroundPosition: center
   backgroundRepeat: no-repeat

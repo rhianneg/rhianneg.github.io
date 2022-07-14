@@ -4,7 +4,7 @@ colors: colors-a
 layout: ProjectLayout
 date: '2022-01-22'
 client: Awesome client
-description: Created a data visualization on peguins. To locate the endanged birds and
+description: Created a data visualization on penguins. To locate the endangered birds.
 featuredImage:
   type: ImageBlock
   url: /images/bg3.jpg

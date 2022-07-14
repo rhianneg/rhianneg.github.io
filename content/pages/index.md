@@ -11,7 +11,7 @@ backgroundImage:
 sections:
   - elementId: ''
     colors: colors-a
-    backgroundSize: inset
+    backgroundSize: full
     title: 'Hello, I’m Rhianne Gonsalves'
     subtitle: 'A Developer, Data Enthusiast, Runner, and Creative.'
     styles:

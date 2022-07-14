@@ -1,5 +1,5 @@
 ---
-title: Python Data VIsualization project
+title: Python Data Visualization project
 colors: colors-a
 layout: ProjectLayout
 date: '2022-01-22'

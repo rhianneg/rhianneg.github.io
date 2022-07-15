@@ -59,6 +59,11 @@ sections:
         iconPosition: right
         style: primary
         elementId: ''
+    text: |+
+      Blah blah blah
+
+
+
   - colors: colors-f
     type: FeaturedProjectsSection
     elementId: ''

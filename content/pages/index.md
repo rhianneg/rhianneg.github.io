@@ -12,9 +12,7 @@ sections:
     colors: colors-f
     backgroundSize: full
     title: 'Hello, I’m Rhianne Gonsalves'
-    subtitle: >-
-      A Data Enthusiast, Automation Developer, Runner, and Creative. This is my
-      portfolio of projects that I've built.
+    subtitle: 'A Data Enthusiast, Automation Developer, Runner, and Creative.'
     styles:
       self:
         height: auto

@@ -14,7 +14,7 @@ sections:
     title: 'Hello, I’m Rhianne Gonsalves'
     subtitle: >-
       A Data Enthusiast, Automation Developer, Runner, and Creative. This is my
-      portfolio of projects that I've built while learning new skills.
+      portfolio of projects that I've built.
     styles:
       self:
         height: auto

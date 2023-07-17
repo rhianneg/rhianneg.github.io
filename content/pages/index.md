@@ -13,8 +13,8 @@ sections:
     backgroundSize: full
     title: 'Hello, I’m Rhianne'
     subtitle: >-
-      A Data Enthusiast, Automation Developer, Runner, and Creative. <br>
-      Welcome to my portfolio. :)
+      A Data Enthusiast, Automation Developer, Runner, and Creative.  Welcome to
+      my portfolio. :)
     styles:
       self:
         height: auto

@@ -12,7 +12,9 @@ sections:
     colors: colors-f
     backgroundSize: full
     title: 'Hello, I’m Rhianne'
-    subtitle: 'A Data Enthusiast, Automation Developer, Runner, and Creative.'
+    subtitle: >-
+      A Data Enthusiast, Automation Developer, Runner, and Creative. Welcome to
+      my portfolio. :)
     styles:
       self:
         height: auto

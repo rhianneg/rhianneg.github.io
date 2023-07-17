@@ -11,7 +11,7 @@ sections:
   - elementId: ''
     colors: colors-f
     backgroundSize: full
-    title: 'Hello, I’m Rhianne Gonsalves'
+    title: 'Hello, I’m Rhianne'
     subtitle: 'A Data Enthusiast, Automation Developer, Runner, and Creative.'
     styles:
       self:

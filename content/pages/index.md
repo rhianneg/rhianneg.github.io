@@ -58,11 +58,11 @@ sections:
         style: primary
         elementId: ''
     text: >
-      Having worked in fast paced environments at Deloitte Consulting and a
-      startup has taught me to quickly adapt and always be open to learning. I
-      like learning new skills and using them to build solutions that help solve
-      business problems. I also believe in using my programming skills to build
-      automation that helps me and my team perform better.
+      Working in fast paced environments has taught me to quickly adapt and
+      always be open to learning. I like learning new skills and using them to
+      build solutions that help solve business problems. I also believe in using
+      my programming skills to build automation tools that help me and my team
+      perform better.
   - colors: colors-f
     type: FeaturedProjectsSection
     elementId: ''

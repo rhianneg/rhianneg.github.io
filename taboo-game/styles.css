@@ -337,10 +337,17 @@ input[type="text"]:focus {
 }
 
 .word-to-guess {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #ff5252;
+    color: #777;
     margin-top: 15px;
+    font-style: italic;
+}
+
+.guesser-instruction {
+    margin-top: 20px;
+    color: #555;
+    font-size: 0.95rem;
 }
 
 /* Game status and scores */

@@ -411,7 +411,7 @@ function updateWordDisplay(word) {
     document.body.classList.remove('is-current-player');
     document.body.classList.add('is-guesser');
     
-    wordToGuess.textContent = word.targetWord;
+    wordToGuess.textContent = "????? (Word Hidden)";
   }
   
   // Update current player display

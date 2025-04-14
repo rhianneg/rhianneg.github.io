@@ -1,0 +1,431 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header styles */
+header {
+    background-color: #ff5252;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.back-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+}
+
+/* Main content */
+main {
+    padding: 40px 0;
+}
+
+/* Game screens */
+.game-screen {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+
+.game-screen.active {
+    display: block;
+}
+
+.game-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.game-card h2 {
+    color: #ff5252;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.game-card p {
+    margin-bottom: 25px;
+    color: #666;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.primary-btn {
+    background-color: #ff5252;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #e04747;
+}
+
+.secondary-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.secondary-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.back-btn {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.success-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.success-btn:hover {
+    background-color: #43a047;
+}
+
+.danger-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.danger-btn:hover {
+    background-color: #e53935;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #ff5252;
+    box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.2);
+}
+
+/* Game code display */
+.highlight-code {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ff5252;
+    letter-spacing: 5px;
+    display: block;
+    margin: 15px 0;
+}
+
+/* Player list */
+.player-list-container {
+    margin: 25px 0;
+    text-align: left;
+}
+
+.player-list-container h3 {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.player-list {
+    list-style: none;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.player-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.player-list li:last-child {
+    border-bottom: none;
+}
+
+.player-list .host-player {
+    font-weight: bold;
+    color: #ff5252;
+}
+
+.player-list .host-player::after {
+    content: " (Host)";
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Waiting message */
+.waiting-message {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    font-style: italic;
+    color: #777;
+}
+
+/* Hide elements based on player role */
+.host-only, .guest-only, .your-turn, .hidden {
+    display: none;
+}
+
+/* Show elements when appropriate */
+.is-host .host-only {
+    display: block;
+}
+
+.is-guest .guest-only {
+    display: block;
+}
+
+.is-current-player .your-turn {
+    display: block;
+}
+
+.is-guesser .guesser-view {
+    display: block;
+}
+
+/* Taboo card styles */
+.card-container {
+    margin: 30px auto;
+    max-width: 350px;
+}
+
+.taboo-card {
+    background-color: #ff5252;
+    color: white;
+    border-radius: 15px;
+    padding: 30px 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    text-align: left;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.target-word {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 40px 0;
+    text-transform: uppercase;
+}
+
+.taboo-words {
+    margin-top: auto;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    padding-top: 20px;
+}
+
+.do-not-say {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.taboo-word {
+    font-size: 1.3rem;
+    margin: 8px 0;
+    text-transform: uppercase;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    flex: 1;
+}
+
+/* Guesser view styles */
+.guesser-view {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.guess-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    min-width: 300px;
+}
+
+.word-to-guess {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff5252;
+    margin-top: 15px;
+}
+
+/* Game status and scores */
+.game-status {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+#current-player-name {
+    color: #ff5252;
+    font-weight: bold;
+}
+
+.player-scores, .final-scores {
+    margin-top: 40px;
+}
+
+.player-scores h3, .final-scores h3 {
+    margin-bottom: 15px;
+    color: #555;
+    text-align: center;
+}
+
+.score-list {
+    list-style: none;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.score-list li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.score-list li:last-child {
+    border-bottom: none;
+}
+
+.player-name {
+    font-weight: 500;
+}
+
+.player-score {
+    font-weight: bold;
+    color: #ff5252;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px 0;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .button-group {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .button-group button {
+        min-width: 150px;
+    }
+    
+    .action-buttons {
+        justify-content: center;
+    }
+    
+    .action-buttons button {
+        flex: 0 1 auto;
+        min-width: 150px;
+    }
+}

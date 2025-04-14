@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taboo Online - French</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Taboo Online - French</h1>
+            <a href="../index.html" class="back-link">Back to Portfolio</a>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Home Screen -->
+        <section id="home-screen" class="game-screen active">
+            <div class="game-card">
+                <h2>Welcome to Taboo</h2>
+                <p>A fun word-guessing game in French!</p>
+                
+                <div class="button-group">
+                    <button id="create-game-btn" class="primary-btn">Start New Game</button>
+                    <button id="join-game-btn" class="secondary-btn">Join Game</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Create Game Screen -->
+        <section id="create-game-screen" class="game-screen">
+            <div class="game-card">
+                <h2>Create New Game</h2>
+                
+                <div class="form-group">
+                    <label for="creator-name">Your Name:</label>
+                    <input type="text" id="creator-name" placeholder="Enter your name">
+                </div>
+                
+                <div class="button-group">
+                    <button id="start-game-btn" class="primary-btn">Create Game</button>
+                    <button class="back-btn">Back</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Join Game Screen -->
+        <section id="join-game-screen" class="game-screen">
+            <div class="game-card">
+                <h2>Join Game</h2>
+                
+                <div class="form-group">
+                    <label for="player-name">Your Name:</label>
+                    <input type="text" id="player-name" placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="game-code">Game Code:</label>
+                    <input type="text" id="game-code" placeholder="Enter 4-digit code">
+                </div>
+                
+                <div class="button-group">
+                    <button id="join-btn" class="primary-btn">Join</button>
+                    <button class="back-btn">Back</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Waiting Room Screen -->
+        <section id="waiting-room-screen" class="game-screen">
+            <div class="game-card">
+                <h2>Waiting Room</h2>
+                
+                <div class="game-info">
+                    <p>Game Code: <span id="display-game-code" class="highlight-code">----</span></p>
+                    <p>Share this code with other players to join</p>
+                </div>
+                
+                <div class="player-list-container">
+                    <h3>Players:</h3>
+                    <ul id="player-list" class="player-list">
+                        <!-- Players will be added here dynamically -->
+                    </ul>
+                </div>
+                
+                <div class="button-group host-only">
+                    <button id="start-playing-btn" class="primary-btn">Start Playing</button>
+                </div>
+                
+                <div class="waiting-message guest-only">
+                    <p>Waiting for host to start the game...</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Game Screen -->
+        <section id="game-screen" class="game-screen">
+            <div class="game-status">
+                <p>Current Player: <span id="current-player-name">--</span></p>
+            </div>
+            
+            <!-- Card for the current player -->
+            <div id="taboo-card-container" class="card-container your-turn hidden">
+                <div class="taboo-card">
+                    <div class="card-header">
+                        <span class="logo">TABOO</span>
+                    </div>
+                    <div class="target-word" id="target-word">--</div>
+                    <div class="taboo-words">
+                        <p class="do-not-say">DO NOT SAY:</p>
+                        <div id="taboo-words-list">
+                            <!-- Taboo words will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="guessed-btn" class="success-btn">Guessed Correctly!</button>
+                    <button id="skip-btn" class="danger-btn">Skip Word</button>
+                </div>
+            </div>
+            
+            <!-- View for the guessers -->
+            <div id="guesser-view" class="guesser-view hidden">
+                <div class="guess-card">
+                    <h3>Devinez:</h3>
+                    <p id="word-to-guess" class="word-to-guess">--</p>
+                </div>
+            </div>
+            
+            <div class="player-scores">
+                <h3>Scores:</h3>
+                <ul id="score-list" class="score-list">
+                    <!-- Scores will be added here dynamically -->
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Game Over Screen -->
+        <section id="game-over-screen" class="game-screen">
+            <div class="game-card">
+                <h2>Game Over!</h2>
+                
+                <div class="final-scores">
+                    <h3>Final Scores:</h3>
+                    <ul id="final-score-list" class="score-list">
+                        <!-- Final scores will be added here -->
+                    </ul>
+                </div>
+                
+                <div class="button-group">
+                    <button id="play-again-btn" class="primary-btn host-only">Play Again</button>
+                    <button id="home-btn" class="secondary-btn">Return Home</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Rhianne G. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Load the game words and scripts -->
+    <script src="words.js" type="module"></script>
+    <script src="firebase-config.js" type="module"></script>
+    <script src="game.js" type="module"></script>
+</body>
+</html>

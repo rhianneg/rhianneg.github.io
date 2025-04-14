@@ -436,3 +436,183 @@ footer {
         min-width: 150px;
     }
 }
+
+/* Mobile-friendly styles - add these to your existing styles.css file */
+
+/* Base responsive adjustments */
+html {
+    font-size: 16px;
+  }
+  
+  /* Improved container sizing for mobile */
+  .container {
+    width: 95%;
+    padding: 0 10px;
+  }
+  
+  /* Make header more compact on mobile */
+  @media (max-width: 600px) {
+    header {
+      padding: 12px 0;
+    }
+    
+    header h1 {
+      font-size: 1.4rem;
+    }
+    
+    .back-link {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Game cards adjustments for mobile */
+  @media (max-width: 768px) {
+    .game-card {
+      padding: 20px 15px;
+    }
+    
+    .game-card h2 {
+      font-size: 1.7rem;
+      margin-bottom: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1rem;
+    }
+    
+    .highlight-code {
+      font-size: 1.5rem;
+      letter-spacing: 3px;
+    }
+  }
+  
+  /* Taboo card responsive design */
+  @media (max-width: 480px) {
+    .card-container {
+      margin: 20px auto;
+      max-width: 280px;
+    }
+    
+    .taboo-card {
+      padding: 20px 15px;
+      min-height: 320px;
+    }
+    
+    .target-word {
+      font-size: 1.8rem;
+      margin: 25px 0;
+    }
+    
+    .taboo-word {
+      font-size: 1.1rem;
+      margin: 6px 0;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .action-buttons button {
+      width: 100%;
+    }
+    
+    .guess-card {
+      min-width: 250px;
+      padding: 20px;
+    }
+  }
+  
+  /* Touch-friendly buttons */
+  @media (max-width: 768px) {
+    button {
+      padding: 12px 15px;
+      min-height: 48px; /* Minimum touch target size */
+    }
+    
+    .button-group {
+      gap: 10px;
+    }
+  }
+  
+  /* Make player list more compact on mobile */
+  @media (max-width: 600px) {
+    .player-list li {
+      padding: 8px 12px;
+    }
+    
+    .score-list li {
+      padding: 12px 15px;
+    }
+  }
+  
+  /* Fix for iOS form inputs */
+  @media (max-width: 768px) {
+    input[type="text"],
+    button {
+      -webkit-appearance: none;
+      border-radius: 6px;
+    }
+  }
+  
+  /* Fix for mobile viewport height issues */
+  @media (max-width: 768px) {
+    .game-screen {
+      min-height: calc(100vh - 150px);
+      padding-bottom: 20px;
+    }
+  }
+
+  /* Add orientation-specific styles */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Landscape mode on mobile */
+    .taboo-card {
+      min-height: 260px;
+    }
+    
+    .card-container {
+      margin: 10px auto;
+    }
+    
+    .target-word {
+      margin: 15px 0;
+    }
+    
+    .action-buttons {
+      flex-direction: row;
+      gap: 15px;
+    }
+    
+    .action-buttons button {
+      width: auto;
+      flex: 1;
+    }
+    
+    /* Adjust scores to be side by side in landscape */
+    .player-scores {
+      margin-top: 20px;
+    }
+    
+    /* Two-column layout for waiting room in landscape */
+    @media (min-width: 480px) {
+      .waiting-room-content {
+        display: flex;
+        gap: 20px;
+      }
+      
+      .game-info, .player-list-container {
+        flex: 1;
+      }
+    }
+  }
+  
+  /* Fix for iOS full height */
+  .game-screen {
+    min-height: 100vh; /* Fallback */
+    min-height: calc(var(--vh, 1vh) * 100);
+  }

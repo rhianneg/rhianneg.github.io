@@ -85,6 +85,10 @@ function initializeApp() {
   gameState.playerId = generatePlayerId();
   
   console.log('Game initialized with player ID:', gameState.playerId);
+  
+  // Add touch handling for mobile devices
+  addTouchHandling();
+  fixMobileViewportHeight();
 }
 
 // Helper functions
@@ -117,6 +121,48 @@ function shuffleArray(array) {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+
+// Fix for mobile 300ms click delay
+function addTouchHandling() {
+  // Buttons that need touch handling
+  const touchButtons = [
+    createGameBtn, 
+    joinGameBtn, 
+    startGameBtn, 
+    joinBtn, 
+    startPlayingBtn, 
+    guessedBtn, 
+    skipBtn, 
+    playAgainBtn, 
+    homeBtn,
+    ...backBtns
+  ];
+  
+  // Add touchstart handler to remove delay
+  touchButtons.forEach(button => {
+    if (!button) return; // Skip if button doesn't exist
+    
+    button.addEventListener('touchstart', function(e) {
+      // Prevent default only if the button is enabled
+      if (!button.disabled) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  });
+}
+
+// Fix for iOS viewport height issues
+function fixMobileViewportHeight() {
+  // Set initial height
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  
+  // Update on resize and orientation change
+  window.addEventListener('resize', () => {
+    vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  });
 }
 
 // Join an existing game

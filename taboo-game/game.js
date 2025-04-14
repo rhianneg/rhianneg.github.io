@@ -59,24 +59,77 @@ function initializeApp() {
     console.log('Create Game button clicked');
     showScreen('createGame');
   });
+
+  createGameBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    console.log('Create Game button touched');
+    showScreen('createGame');
+  });
   
   joinGameBtn.addEventListener('click', function() {
     console.log('Join Game button clicked');
     showScreen('joinGame');
   });
+
+  joinGameBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    console.log('Join Game button touched');
+    showScreen('joinGame');
+  });
   
+  // Add touchend events for other buttons
   startGameBtn.addEventListener('click', createGame);
+  startGameBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    createGame();
+  });
+  
   joinBtn.addEventListener('click', joinGame);
+  joinBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    joinGame();
+  });
+  
   startPlayingBtn.addEventListener('click', startPlaying);
+  startPlayingBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    startPlaying();
+  });
+  
   guessedBtn.addEventListener('click', handleGuessedCorrectly);
+  guessedBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleGuessedCorrectly();
+  });
+  
   skipBtn.addEventListener('click', handleSkipWord);
+  skipBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleSkipWord();
+  });
+  
   playAgainBtn.addEventListener('click', restartGame);
+  playAgainBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    restartGame();
+  });
+  
   homeBtn.addEventListener('click', goHome);
+  homeBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    goHome();
+  });
   
   // Add back button functionality
   backBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       console.log('Back button clicked');
+      showScreen('home');
+    });
+    
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      console.log('Back button touched');
       showScreen('home');
     });
   });
@@ -85,6 +138,12 @@ function initializeApp() {
   gameState.playerId = generatePlayerId();
   
   console.log('Game initialized with player ID:', gameState.playerId);
+  // Add debug touch event listener to see what's being touched
+  document.addEventListener('touchstart', function(e) {
+    console.log('Touch at:', e.touches[0].clientX, e.touches[0].clientY);
+    console.log('Element:', document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY));
+  });
+
   
   // Add touch handling for mobile devices
   addTouchHandling();

@@ -230,3 +230,19 @@ footer {
         font-size: 2rem;
     }
 }
+
+/* iOS specific button fixes */
+@supports (-webkit-touch-callout: none) {
+    button {
+      cursor: pointer;
+      -webkit-appearance: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    
+    .button-group {
+      position: relative;
+      z-index: 10;
+    }
+  }

@@ -81,5 +81,3 @@ const tabooWords = [
     tabooWords: ["Parents", "Enfant", "Père", "Mère", "Frère"]
   }
 ];
-
-export default tabooWords;

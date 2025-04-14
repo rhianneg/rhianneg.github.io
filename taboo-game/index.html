@@ -167,9 +167,11 @@
         </div>
     </footer>
 
-    <!-- Load the game words and scripts -->
-    <script src="words.js" type="module"></script>
-    <script src="firebase-config.js" type="module"></script>
-    <script src="game.js" type="module"></script>
+    <!-- Load Firebase configuration first -->
+    <script src="firebase-config.js"></script>
+    <!-- Load the game words -->
+    <script src="words.js"></script>
+    <!-- Load the game logic last -->
+    <script src="game.js"></script>
 </body>
 </html>

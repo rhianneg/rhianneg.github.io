@@ -2,7 +2,7 @@
 const firebaseConfig = {
   apiKey: "AIzaSyBhOVOlK0-uPt18298PpL8TdTeoZBFpBvQ",
   authDomain: "taboo-game-9e193.firebaseapp.com",
-  databaseURL: "https://taboo-game-9e193-default-rtdb.firebaseio.com",
+  databaseURL: "https://taboo-game-9e193-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "taboo-game-9e193",
   storageBucket: "taboo-game-9e193.firebasestorage.app",
   messagingSenderId: "979911415930",

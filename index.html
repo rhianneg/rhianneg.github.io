@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhianne G's Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rhianne's Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Rhianne G</h1>
+            <h1>Rhianne's Portfolio</h1>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -20,9 +20,62 @@
     </header>
     
     <main class="container">
-        <section class="hero">
-            <h2>Welcome to My Portfolio</h2>
-            <p>This page is a work in progress. Check out my games section for some fun projects!</p>
+        <section class="profile-section">
+            <div class="profile-image">
+                <img src="images/profile.jpg" alt="Rhianne's profile photo">
+            </div>
+            <div class="profile-content">
+                <p>Hello! I'm Rhianne, a Data Science and Business Analytics graduate from CentraleSupélec and ESSEC Business School with prior work experiences building software products and using data to craft great user experiences for clients in Fintech and E-Commerce.</p>
+                <p>In my free time I like to build small projects like <a href="games.html">games</a> to play with friends over video call and predicting who's going to win this year's F1 driver's championship.</p>
+            </div>
+        </section>
+        
+        <section class="projects-section">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3><a href="projects/project2_airplane-tracker/github_pages_aircraft_tracker.html">Airplane Tracker</a></h3>
+                    <div class="project-content">
+                        <div class="project-image">
+                            <a href="projects/project2_airplane-tracker/github_pages_aircraft_tracker.html">
+                                <img src="images/project1.png" alt="Project image">
+                            </a>
+                        </div>
+                        <p>Have you ever wondered what planes are above you this minute? Well, I let my intrusive thoughts win and built a page to show you what are the nearest planes to you right now.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3><a href="projects/project2.html"> Restaurant Rating predictor</a></h3>
+                    <div class="project-content">
+                        <div class="project-image">
+                            <a href="projects/project2.html">
+                                <img src="images/project2.jpg" alt="Project image">
+                            </a>
+                        </div>
+                        <p>Is a perfect restaurant one that take rervations? Can I use Machine learning to tell you if your restaurant will be highly rated? Well that's what this project does. It helps you find the best combination of factors to include when setting up a restaurant.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3><a href="projects/project3.html">Project in progress</a></h3>
+                    <div class="project-content">
+                        <div class="project-image">
+                            <a href="projects/project3.html">
+                                <img src="images/project3.jpg" alt="Project image">
+                            </a>
+                        </div>
+                        <p>This is a project I'm building using airflow to pull weather data. The latest updates will be on my github account.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Title here</h3>
+                    <div class="project-content">
+                        <div class="project-image">
+                            <div class="photo-placeholder">Project in progress</div>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
     

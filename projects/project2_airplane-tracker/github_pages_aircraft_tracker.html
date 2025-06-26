@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft Tracker - Live Flight Data</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #e8f2ff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e3c72;
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+        
+        .scan-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+            letter-spacing: 0.025em;
+        }
+        
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+        
+        .scan-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .map-container, .results-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        
+        .results-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .results-content {
+            padding: 20px;
+            max-height: 480px;
+            overflow-y: auto;
+            background: white;
+            color: #333;
+        }
+        
+        .aircraft-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .aircraft-table th {
+            background: #f8f9fa;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.85rem;
+            color: #1e3c72;
+        }
+        
+        .aircraft-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 0.8rem;
+            color: #333;
+        }
+        
+        .aircraft-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status-indicator {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .status-flying {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-ground {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            background: white;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 -20px 20px -20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-plane"></i> Aircraft Tracker</h1>
+            <p>Real-time aircraft tracking using OpenSky Network API</p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="latitude">Latitude</label>
+                <input type="number" id="latitude" value="48.8394" step="0.0001" placeholder="Enter latitude">
+            </div>
+            
+            <div class="control-group">
+                <label for="longitude">Longitude</label>
+                <input type="number" id="longitude" value="2.3566" step="0.0001" placeholder="Enter longitude">
+            </div>
+            
+            <div class="control-group">
+                <label for="radius">Search Radius (km)</label>
+                <select id="radius">
+                    <option value="10">10 km</option>
+                    <option value="25">25 km</option>
+                    <option value="50" selected>50 km</option>
+                    <option value="75">75 km</option>
+                    <option value="100">100 km</option>
+                    <option value="150">150 km</option>
+                    <option value="200">200 km</option>
+                </select>
+            </div>
+            
+            <button class="scan-btn" onclick="scanAircraft()">
+                <i class="fas fa-search"></i> Scan Aircraft
+            </button>
+        </div>
+        
+        <div class="content">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3><i class="fas fa-list"></i> Aircraft Results</h3>
+                    <p id="scan-info">Click on the map to select a location, then scan for aircraft</p>
+                </div>
+                <div class="results-content" id="results">
+                    <div class="loading">
+                        <i class="fas fa-map-marker-alt fa-3x" style="color: #ddd; margin-bottom: 20px;"></i>
+                        <p>Select a location on the map and click "Scan Aircraft" to begin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([48.8394, 2.3566], 10);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Add marker
+        let marker = L.marker([48.8394, 2.3566], {
+            draggable: true,
+            icon: L.divIcon({
+                html: '<i class="fas fa-crosshairs" style="color: #e74c3c; font-size: 24px;"></i>',
+                iconSize: [30, 30],
+                className: 'custom-marker'
+            })
+        }).addTo(map);
+        
+        // Update coordinates when marker is dragged
+        marker.on('dragend', function(e) {
+            const position = e.target.getLatLng();
+            updateCoordinates(position.lat, position.lng);
+        });
+        
+        // Update coordinates when map is clicked
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            marker.setLatLng([lat, lng]);
+            updateCoordinates(lat, lng);
+        });
+        
+        function updateCoordinates(lat, lng) {
+            document.getElementById('latitude').value = lat.toFixed(4);
+            document.getElementById('longitude').value = lng.toFixed(4);
+        }
+        
+        // Update marker when coordinates are manually entered
+        document.getElementById('latitude').addEventListener('change', updateMarkerFromInputs);
+        document.getElementById('longitude').addEventListener('change', updateMarkerFromInputs);
+        
+        function updateMarkerFromInputs() {
+            const lat = parseFloat(document.getElementById('latitude').value);
+            const lng = parseFloat(document.getElementById('longitude').value);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                marker.setLatLng([lat, lng]);
+                map.setView([lat, lng], map.getZoom());
+            }
+        }
+        
+        // Airline codes lookup
+        const airlineCodes = {
+    // Major US Airlines
+    'UAL': 'United Airlines',
+    'AAL': 'American Airlines', 
+    'DAL': 'Delta Air Lines',
+    'SWA': 'Southwest Airlines',
+    'JBU': 'JetBlue Airways',
+    'ASA': 'Alaska Airlines',
+    'FFT': 'Frontier Airlines',
+    'NKS': 'Spirit Airlines',
+    'HAL': 'Hawaiian Airlines',
+    'SKW': 'SkyWest Airlines',
+    'ENY': 'Envoy Air',
+    'PSA': 'PSA Airlines',
+    'PDT': 'Piedmont Airlines',
+    'CPZ': 'Compass Airlines',
+    'RPA': 'Republic Airways',
+    'GJS': 'GoJet Airlines',
+    'TCF': 'Shuttle America',
+    'EGF': 'American Eagle',
+    'FLG': 'Allegiant Air',
+    'SUN': 'Sun Country Airlines',
+    'VRD': 'Virgin America',
+    'JSX': 'JSX',
+    
+    // Major European Airlines
+    'BAW': 'British Airways',
+    'AFR': 'Air France',
+    'DLH': 'Lufthansa',
+    'KLM': 'KLM Royal Dutch Airlines',
+    'EIN': 'Aer Lingus',
+    'RYR': 'Ryanair',
+    'EZY': 'easyJet',
+    'THY': 'Turkish Airlines',
+    'IBS': 'Iberia',
+    'TAP': 'TAP Air Portugal',
+    'VLG': 'Vueling Airlines',
+    'TVF': 'Transavia',
+    'ITA': 'ITA Airways',
+    'AZA': 'Alitalia',
+    'SAS': 'Scandinavian Airlines',
+    'FIN': 'Finnair',
+    'LOT': 'LOT Polish Airlines',
+    'CSA': 'Czech Airlines',
+    'AUA': 'Austrian Airlines',
+    'SWR': 'Swiss International Air Lines',
+    'BEL': 'Brussels Airlines',
+    'WZZ': 'Wizz Air',
+    'EJU': 'easyJet Europe',
+    'VIR': 'Virgin Atlantic',
+    'EWG': 'Eurowings',
+    'NLY': 'Niki',
+    'TRA': 'Transavia Airlines',
+    'MLT': 'Air Malta',
+    'CYP': 'Cyprus Airways',
+    'AEE': 'Aegean Airlines',
+    'CFG': 'Condor',
+    'BER': 'Air Berlin',
+    'STR': 'Air Serbia',
+    'CTN': 'Croatia Airlines',
+    'MSR': 'EgyptAir',
+    'RBA': 'Royal Brunei Airlines',
+    'AMC': 'Air Malta',
+    'TVS': 'Sky Express',
+    'REU': 'Air Austral',
+    'ROT': 'Tarom',
+    'BUC': 'Blue Air',
+    'WIF': 'Widerøe',
+    'FLM': 'Flybe',
+    'MON': 'Monarch Airlines',
+    'TOM': 'TUI Airways',
+    'EXS': 'Jet2.com',
+    
+    // Low-Cost European Carriers
+    'WUK': 'Wizz Air UK',
+    'GWI': 'Germanwings',
+    'VOE': 'Volotea',
+    'PGT': 'Pegasus Airlines',
+    'AHY': 'Azerbaijan Airlines',
+    'BRU': 'Belavia',
+    'UKR': 'Ukraine International Airlines',
+    'AUI': 'Ukraine International Airlines',
+    'SBI': 'S7 Airlines',
+    'AFL': 'Aeroflot',
+    'UTN': 'UT Air',
+    'SVR': 'Ural Airlines',
+    'NVR': 'Nordavia',
+    'VKG': 'VIM Airlines',
+    'WOW': 'WOW Air',
+    'ICE': 'Icelandair',
+    'FI': 'Icelandair',
+    'GLO': 'Gol Linhas Aéreas',
+    'AZU': 'Azul Brazilian Airlines',
+    'TAM': 'LATAM Airlines',
+    
+    // Cargo Airlines
+    'FDX': 'FedEx Express',
+    'UPS': 'UPS Airlines',
+    'ATI': 'Air Transport International',
+    'ABX': 'ABX Air',
+    'GTI': 'Atlas Air',
+    'CKS': 'Kalitta Air',
+    'MPE': 'Mountain Air Cargo',
+    'SNC': 'Sun Country Airlines',
+    'NCB': 'North American Airlines',
+    
+    // International (keeping existing ones)
+    'QTR': 'Qatar Airways',
+    'UAE': 'Emirates',
+    'CPA': 'Cathay Pacific',
+    'SIA': 'Singapore Airlines',
+    'JAL': 'Japan Airlines',
+    'ANA': 'All Nippon Airways',
+    'QFA': 'Qantas'
+};
+        
+        function getAirlineFromCallsign(callsign) {
+            if (!callsign || callsign === 'Unknown') return 'Unknown';
+            const code = callsign.substring(0, 3).toUpperCase();
+            return airlineCodes[code] || `Unknown (${code})`;
+        }
+        
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+        
+        function estimateFlightPhase(altitude, verticalRate, velocity) {
+            if (!altitude) return "Unknown";
+            
+            const altitudeFt = altitude * 3.28084;
+            
+            if (altitudeFt < 1000) return "Ground/Taxi";
+            if (altitudeFt < 10000 && verticalRate > 5) return "Takeoff/Climb";
+            if (altitudeFt < 10000 && verticalRate < -5) return "Approach/Landing";
+            if (altitudeFt > 25000) return "Cruise";
+            if (verticalRate > 3) return "Climbing";
+            if (verticalRate < -3) return "Descending";
+            return "Level Flight";
+        }
+        
+        async function scanAircraft() {
+            const lat = parseFloat(document.getElementById('latitude').value);
+            const lng = parseFloat(document.getElementById('longitude').value);
+            const radius = parseInt(document.getElementById('radius').value);
+            
+            if (isNaN(lat) || isNaN(lng)) {
+                alert('Please enter valid coordinates');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('results').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin fa-3x" style="color: #667eea; margin-bottom: 20px;"></i>
+                    <p>Scanning for aircraft...</p>
+                </div>
+            `;
+            
+            document.querySelector('.scan-btn').disabled = true;
+            
+            try {
+                // Calculate bounding box
+                const latOffset = radius / 111.0;
+                const lonOffset = radius / (111.0 * Math.abs(lat / 90.0) || 1);
+                
+                const params = new URLSearchParams({
+                    lamin: lat - latOffset,
+                    lamax: lat + latOffset,
+                    lomin: lng - lonOffset,
+                    lomax: lng + lonOffset
+                });
+                
+                const response = await fetch(`https://opensky-network.org/api/states/all?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.states || data.states.length === 0) {
+                    document.getElementById('results').innerHTML = `
+                        <div class="loading">
+                            <i class="fas fa-search fa-3x" style="color: #ddd; margin-bottom: 20px;"></i>
+                            <p>No aircraft found in this area</p>
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                                Try increasing the search radius or selecting a busier location
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Process aircraft data
+                const aircraft = data.states
+                    .filter(state => state[5] !== null && state[6] !== null)
+                    .map(state => {
+                        const callsign = (state[1] || '').trim() || 'Unknown';
+                        const distance = calculateDistance(lat, lng, state[6], state[5]);
+                        const altitudeFt = state[7] ? state[7] * 3.28084 : 0;
+                        const speedKts = state[9] ? state[9] * 1.94384 : 0;
+                        
+                        return {
+                            callsign,
+                            airline: getAirlineFromCallsign(callsign),
+                            country: state[2],
+                            distance: distance,
+                            altitude: altitudeFt,
+                            speed: speedKts,
+                            phase: estimateFlightPhase(state[7], state[11], state[9]),
+                            status: state[8] ? 'Ground' : 'Flying',
+                            lat: state[6],
+                            lng: state[5],
+                            lastContact: new Date(state[4] * 1000).toLocaleTimeString()
+                        };
+                    })
+                    .sort((a, b) => a.distance - b.distance);
+                
+                displayResults(aircraft, lat, lng, radius);
+                
+            } catch (error) {
+                console.error('Error fetching aircraft data:', error);
+                document.getElementById('results').innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-exclamation-triangle fa-3x" style="color: #e74c3c; margin-bottom: 20px;"></i>
+                        <p>Error fetching aircraft data</p>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                            Please check your internet connection and try again
+                        </p>
+                    </div>
+                `;
+            } finally {
+                document.querySelector('.scan-btn').disabled = false;
+            }
+        }
+        
+        function displayResults(aircraft, lat, lng, radius) {
+            const totalAircraft = aircraft.length;
+            const flyingCount = aircraft.filter(a => a.status === 'Flying').length;
+            const groundCount = aircraft.filter(a => a.status === 'Ground').length;
+            const avgDistance = totalAircraft > 0 ? (aircraft.reduce((sum, a) => sum + a.distance, 0) / totalAircraft) : 0;
+            
+            const statsHtml = `
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">${totalAircraft}</div>
+                        <div class="stat-label">Total Aircraft</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${flyingCount}</div>
+                        <div class="stat-label">In Flight</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${groundCount}</div>
+                        <div class="stat-label">On Ground</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${avgDistance.toFixed(1)}</div>
+                        <div class="stat-label">Avg Distance (km)</div>
+                    </div>
+                </div>
+            `;
+            
+            const tableHtml = `
+                <table class="aircraft-table">
+                    <thead>
+                        <tr>
+                            <th>Flight Code</th>
+                            <th>Airline</th>
+                            <th>Distance</th>
+                            <th>Altitude</th>
+                            <th>Speed</th>
+                            <th>Phase</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${aircraft.map(a => `
+                            <tr>
+                                <td><strong>${a.callsign}</strong></td>
+                                <td>${a.airline}</td>
+                                <td>${a.distance.toFixed(1)} km</td>
+                                <td>${a.altitude.toFixed(0)} ft</td>
+                                <td>${a.speed.toFixed(0)} kts</td>
+                                <td>${a.phase}</td>
+                                <td><span class="status-indicator ${a.status === 'Flying' ? 'status-flying' : 'status-ground'}">${a.status}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            document.getElementById('results').innerHTML = statsHtml + tableHtml;
+            document.getElementById('scan-info').textContent = 
+                `Found ${totalAircraft} aircraft within ${radius}km of ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+        }
+        
+        // Initialize with a scan
+        window.addEventListener('load', function() {
+            // Optional: Auto-scan on load
+            // scanAircraft();
+        });
+    </script>
+</body>
+</html>

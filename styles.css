@@ -21,10 +21,11 @@ body {
 
 /* Header styles */
 header {
-    background-color: #2a3990;
+    background-color: #8a9cc2;
     color: #fff;
     padding: 20px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
 }
 
 header .container {
@@ -34,7 +35,7 @@ header .container {
 }
 
 header h1 {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     font-weight: 700;
 }
 
@@ -55,7 +56,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #b8c5ff;
+    color: #e8ecf4;
 }
 
 /* Main content styles */
@@ -63,29 +64,195 @@ main {
     padding: 40px 0;
 }
 
-.hero {
-    text-align: center;
-    margin-bottom: 40px;
+/* Profile section */
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
+    margin-top: 20px;
 }
 
-.hero h2 {
-    font-size: 2.5rem;
+.profile-image {
+    flex: 0 0 300px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-content {
+    flex: 1;
+}
+
+.profile-content p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.profile-content a {
     color: #2a3990;
-    margin-bottom: 20px;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.page-header {
+.profile-content a:hover {
+    text-decoration: underline;
+}
+
+/* Projects section */
+.projects-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #8a9cc2;
+    padding-bottom: 10px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 30px;
+}
+
+.project-card {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid #8a9cc2;
+}
+
+.project-card h3 {
+    background-color: #8a9cc2;
+    padding: 15px;
+    font-size: 1.3rem;
+}
+
+.project-card h3 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.project-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.project-content {
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.project-image {
+    flex: 0 0 180px;
+}
+
+.project-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.project-content p {
+    flex: 1;
+}
+
+/* Footer styles */
+footer {
+    background-color: #8a9cc2;
+    color: #fff;
     text-align: center;
-    margin-bottom: 40px;
+    padding: 20px 0;
+    margin-top: 40px;
 }
 
-.page-header h2 {
-    font-size: 2.5rem;
-    color: #2a3990;
-    margin-bottom: 10px;
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-image {
+        flex: 0 0 250px;
+        margin: 0 auto;
+        max-width: 250px;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* Games list styles */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav ul {
+        margin-top: 15px;
+        justify-content: center;
+    }
+    
+    nav ul li {
+        margin: 0 10px;
+    }
+    
+    .project-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .project-image {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 15px;
+    }
+    
+    .hero h2 {
+        font-size: 1.8rem;
+    }
+    
+    .page-header h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .profile-image {
+        flex: 0 0 200px;
+        max-width: 200px;
+    }
+    
+    .profile-content p {
+        font-size: 1rem;
+    }
+    
+    .projects-section h2 {
+        font-size: 1.6rem;
+    }
+    
+    .project-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .container {
+        width: 95%;
+        padding: 0 10px;
+    }
+}
+
+/* Preserve existing games page styles */
 .games-list {
     display: grid;
     gap: 30px;
@@ -106,6 +273,9 @@ main {
 
 .game-card h3 {
     margin-bottom: 10px;
+    background-color: transparent;
+    color: #2a3990;
+    padding: 0;
 }
 
 .game-card h3 a {
@@ -155,80 +325,15 @@ main {
     color: white;
 }
 
-/* Game rules styles */
-.game-rules {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.page-header {
+    text-align: center;
     margin-bottom: 40px;
 }
 
-.game-rules h3 {
-    color: #2a3990;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1.8rem;
-}
-
-.rule {
-    margin-bottom: 25px;
-}
-
-.rule h4 {
-    font-size: 1.2rem;
+.page-header h2 {
+    font-size: 2.5rem;
     color: #2a3990;
     margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-}
-
-.rule ol, .rule ul {
-    padding-left: 25px;
-    margin-top: 10px;
-}
-
-.rule li {
-    margin-bottom: 5px;
-}
-
-.play-game {
-    text-align: center;
-    margin-top: 40px;
-}
-
-.play-game h3 {
-    color: #2a3990;
-    margin-bottom: 15px;
-}
-
-/* Footer styles */
-footer {
-    background-color: #2a3990;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 40px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    header .container {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    nav ul {
-        margin-top: 15px;
-    }
-    
-    nav ul li {
-        margin: 0 10px;
-    }
-    
-    .hero h2 {
-        font-size: 2rem;
-    }
 }
 
 /* iOS specific button fixes */

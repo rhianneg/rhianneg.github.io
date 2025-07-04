@@ -42,13 +42,21 @@
     display: block;
 }
 
-/* Project content styles */
-.project-content {
+/* Project content styles - Override main styles.css */
+.project-article .project-content {
     padding: 40px;
     max-width: 800px;
     margin: 0 auto;
     font-size: 1.1rem;
     line-height: 1.7;
+    /* Override flex layout from main styles.css */
+    display: block !important;
+    flex-direction: unset !important;
+    gap: unset !important;
+    /* Ensure single column layout */
+    column-count: 1 !important;
+    column-gap: normal !important;
+    columns: none !important;
 }
 
 .project-intro {

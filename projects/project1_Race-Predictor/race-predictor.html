@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Building a ML-Powered F1 Race Predictor</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../project-styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Rhianne's Portfolio</h1>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../games.html">Games</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <article class="project-article">
+            <header class="project-header">
+                <h2>Building a ML-Powered F1 Race Predictor: From Data to Deployment</h2>
+                <div class="project-meta">
+                    <span class="project-date">June 20, 2025</span>
+                    <span class="project-category">Category: Machine Learning & Data Science</span>
+                </div>
+                <p style="margin-top: 20px; font-style: italic;">How I built a machine learning system that predicted Formula 1 podium finishers with 91% accuracy</p>
+            </header>
+            
+            <div class="project-featured-image">
+                <img src="images/f1-predictor-featured.png" alt="F1 Race Predictor Dashboard">
+            </div>
+            
+            <div class="project-content">
+                <section class="project-intro">
+                    <p>
+                        Formula 1 is a racing sport, and notoriously unpredictable. 20 drivers battling across different circuits, varying weather conditions, and constantly evolving car performance, predicting race outcomes is an interesting data challenge. I wanted to use <strong> machine learning find patterns in this chaos.</strong>
+                    </p>
+                    <p>
+                        My goal was to build a system that could predict the top 3 finishers for any F1 race with atleast 80% accuracy.
+                    </p>
+                </section>
+                
+                <section class="project-section">
+                    <h3>🏁 The Goal</h3>
+                    <p>
+                        Formula 1 presents an interesting prediction challenges in sports. F1 features evolving technology, rule changes, and unpredictable variables like weather and strategy calls that can completely shuffle race outcomes.
+                    </p>
+                    <p>
+                        My aim was to build a system that could cut through this complexity to identify the underlying patterns that determine race results. The goal: achieve an 80%+ accuracy in predicting podium finishers.
+                    </p>
+                </section>
+                
+                <section class="project-section">
+                    <h3>📊 Step 1: Data Collection</h3>
+                    <h4>Discovering the OpenF1 API</h4>
+                    <p>
+                        I used the OpenF1 API, this API allowed me to access historical F1 data from the 2023 season onwards for free. It contained:
+                    </p>
+                    <ul>
+                        <li>Race results and qualifying positions</li>
+                        <li>Detailed weather conditions</li>
+                        <li>Driver and team information</li>
+                        <li>Session-by-session data</li>
+                    </ul>
+                    
+                    <h4>The Collection Process</h4>
+                    <p>I built a comprehensive data collection pipeline that gathered:</p>
+                    <div class="code-block">
+                        <pre><code>
+# This is a sample of the data I collected
+- 2023: 440 driver-race combinations (~22 races)
+- 2024: 479 driver-race combinations (~23 races)  
+- 2025: 220 driver-race combinations (~10 races)
+- Total: 1,139 complete records
+                        </code></pre>
+                    </div>
+                    <p>
+                        <strong>Key insight</strong>: The 2025 data revealed major changes - Lewis Hamilton moved to Ferrari, 5 new rookies joined, and McLaren emerged as the dominant team. This real-world complexity would be crucial for testing my model as I choose to train the model on data from 2023 and 2024 and test the model on data from 2025.
+                    </p>
+                    
+                    <!-- 
+                    <div class="project-image">
+                        <img src="images/f1-data-collection.jpg" alt="Data collection process visualization">
+                        <figcaption>The data collection pipeline processing race data from the OpenF1 API</figcaption>
+                    </div> 
+                    -->
+                    
+                    <h4>Technical Challenges</h4>
+                    <p>The API had rate limits (10 requests per 10 seconds), so I implemented:</p>
+                    <ul>
+                        <li>Automatic retry logic with exponential backoff</li>
+                        <li>5-second delays between requests</li>
+                    </ul>
+                </section>
+                
+                <section class="project-section">
+                    <h3>🔧 Step 2: Feature Engineering</h3>
+                    <p>
+                        Although pretty comprehensive, the raw data alone wasn't enough. I wanted to engineer features that captured the essence of F1 performance.
+                    </p>
+                    
+                    <h4>Core Predictive Features</h4>
+                    <p><strong>1. Qualifying Position (Most Important)</strong></p>
+                    <ul>
+                        <li>Primary predictor - as the starting position heavily influences race outcome.</li>
+                        <li>It became 22% of my model's decision-making process.</li>
+                    </ul>
+                    <br>
+                    <p><strong>2. Driver Recent Form</strong></p>
+                    <ul>
+                        <li>Calculated as the rolling average of last 5 race positions.</li>
+                        <li>It captures current momentum and confidence.</li>
+                    </ul>
+                    <br>
+                    <p><strong>3. Team Performance Metrics</strong></p>
+                    <ul>
+                        <li>Season-average team position</li>
+                        <li>Team win/podium rates</li>
+                        <li>Critical for understanding how car competitive the car is</li>
+                    </ul>
+                    <br>
+                    <p><strong>4. Circuit-Specific History</strong></p>
+                    <ul>
+                        <li>It checked how each driver historically performs at specific tracks (For Eg: Some drivers excel at Monaco but struggle at Monza).</li>
+                    </ul>
+                    <br>
+                    <h4>Advanced Feature Engineering</h4>
+                    <div class="code-block">
+                        <pre><code>
+# Example: Building historical context
+for each_race:
+    driver_history = get_races_before_this_date(driver, race_date)
+    features['driver_races_completed'] = len(driver_history)
+    features['driver_career_wins'] = count_wins(driver_history)
+    features['driver_recent_avg_position'] = recent_5_races_avg(driver_history)
+                        </code></pre>
+                    </div>
+                    <p>
+                        <strong>The Innovation</strong>: Time-aware feature engineering. For each race prediction, I used data available before that race. 
+                    </p>
+                    <!-- 
+                    <div class="project-image">
+                        <img src="images/f1-feature-engineering.jpg" alt="Feature engineering visualization">
+                        <figcaption>Feature importance breakdown showing qualifying position as the top predictor</figcaption>
+                    </div> -->
+                </section>
+                
+                <section class="project-section">
+                    <h3>🤖 Step 3: Model Development</h3>
+                    <h4>Algorithm Selection</h4>
+                    <p>I tested three approaches:</p>
+                    <ol>
+                        <li><strong>Logistic Regression</strong>: Clean, interpretable baseline</li>
+                        <li><strong>Random Forest</strong>: Handles non-linear relationships and feature interactions</li>
+                        <li><strong>Gradient Boosting</strong>: Often the best performer for tabular data</li>
+                    </ol>
+                    
+                    <h4>The Training Strategy</h4>
+                    <p><strong>Time-Based Split</strong> (Critical Decision):</p>
+                    <ul>
+                        <li><strong>Training</strong>: 2023-2024 data (919 samples)</li>
+                        <li><strong>Testing</strong>: 2025 data (200 samples)</li>
+                    </ul>
+                    <p>This simulates real-world usage - training on historical data to predict future races.</p>
+                    
+                    <h4>Results That Exceeded Expectations</h4>
+                    <div class="code-block">
+                        <pre><code>
+🏆 FINAL MODEL: Random Forest
+✅ Test Accuracy: 91.0%
+✅ AUC Score: 0.967 (near-perfect ranking ability)
+✅ Perfect races: 3 out of 10 (100% accuracy)
+✅ 90%+ accuracy: 6 out of 10 races
+                        </code></pre>
+                    </div>
+                    <!-- 
+                    <div class="project-image">
+                        <img src="images/f1-model-results.jpg" alt="Model performance results">
+                        <figcaption>Model performance across different race weekends in 2025</figcaption>
+                    </div> -->
+                </section>
+                
+                <section class="project-section">
+                    <h3>💻 Step 4: Building the Dashboard - User Experience</h3>
+                    <!-- <h4>Design Philosophy</h4>
+                    <p>
+                        I wanted the interface to feel like setting up an actual F1 starting grid, not filling out a technical form.
+                    </p> -->
+                    <p>
+                        I wanted users to have two options to make a prediction. Option 1 they choose a race and the model generated the results. Option 2 they set the qualifying results and treack weather and the model predicted the output.
+                    </p>
+                    <h4>Key Interface Innovations</h4>
+                    <p><strong>Tab 2 Grid-Based Layout</strong>:</p>
+                    <p>Instead of 20 separate input boxes, I created a visual grid:</p>
+                    <ul>
+                        <li>P1-P5: Pole position and front runners</li>
+                        <li>P6-P10: Midfield competitors</li>
+                        <li>P11-P15: Back of the midfield positions</li>
+                        <li>P16-P20: Back of the grid</li>
+                    </ul>
+                    
+                    <p><strong>Driver Dropdowns</strong>:</p>
+                    <p>Each position has a dropdown showing "Driver Name (Team)" - much more intuitive than typing positions.</p>
+                    
+                    <p><strong>Real-Time Weather Controls</strong>:</p>
+                    <ul>
+                        <li>Wet race toggle</li>
+                        <li>Temperature sliders</li>
+                        <li>Humidity controls</li>
+                    </ul>
+                    <!--
+                    <div class="project-image">
+                        <img src="images/f1-dashboard.jpg" alt="F1 Predictor Dashboard Interface">
+                        <figcaption>The intuitive grid-based interface for setting up race predictions</figcaption>
+                    </div> -->
+                </section>
+                
+                <section class="project-section">
+                    <h3>🚀 Step 5: Cloud Deployment - Production Ready</h3>
+                    <h4>The Update Challenge</h4>
+                    <p>
+                        Keeping in mind that I wanted to run the model regularly (after each qualifying and race session), I choose to deploy the model on Streamlit Community Cloud and setup a Fallback system that trained the model if it wasn't able to load the existing model.
+                    </p>
+                    
+                    <h4>The Solution: Smart Fallback System</h4>
+                    <p>I implemented a robust deployment strategy:</p>
+                    <div class="code-block">
+                        <pre><code>
+@st.cache_resource
+def load_or_train_model():
+    try:
+        # Try to load saved model
+        return joblib.load('model.pkl')
+    except:
+        # If incompatible, retrain automatically
+        return train_model_with_cloud_environment()
+                        </code></pre>
+                    </div>
+                    <p>This ensures the app always works, regardless of environment differences.</p>
+                </section>
+                
+                <section class="project-section">
+                    <h3>📈 Real-World Performance</h3>
+                    <h4>Validation Results</h4>
+                    <p>Testing on actual 2025 races:</p>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead>
+                            <tr style="background-color: #8a9cc2; color: white;">
+                                <th style="padding: 12px; border: 1px solid #ddd;">Race</th>
+                                <th style="padding: 12px; border: 1px solid #ddd;">Accuracy</th>
+                                <th style="padding: 12px; border: 1px solid #ddd;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Chinese GP</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">100% 🏆</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Perfect prediction</td>
+                            </tr>
+                            <tr style="background-color: #f9f9f9;">
+                                <td style="padding: 10px; border: 1px solid #ddd;">Miami GP</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">100% 🏆</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Perfect prediction</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Monaco GP</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">100% 🏆</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Perfect prediction</td>
+                            </tr>
+                            <tr style="background-color: #f9f9f9;">
+                                <td style="padding: 10px; border: 1px solid #ddd;">Bahrain GP</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">95% ⭐</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Near perfect</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Canadian GP</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">80% ✅</td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">Solid performance</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                
+                <section class="project-section">
+                    <h3>🎯 Key Learnings & Takeaways</h3>
+                    <h4>Technical Lessons</h4>
+                    <p><strong>1. Data Quality > Model Complexity</strong></p>
+                    <ul>
+                        <li>Clean, well-engineered features outperformed complex algorithms</li>
+                        <li>Time-aware feature engineering prevented data leakage</li>
+                    </ul>
+                    
+                    <p><strong>2. Real-World Validation is Everything</strong></p>
+                    <ul>
+                        <li>Cross-validation gave 91% accuracy</li>
+                        <li>Real 2025 races also gave 91% accuracy</li>
+                        <li>The model truly learned generalizable patterns</li>
+                    </ul>
+                    
+                    <p><strong>3. Deployment Complexity</strong></p>
+                    <ul>
+                        <li>Version compatibility is a real challenge</li>
+                        <li>Smart fallback systems are essential</li>
+                        <li>User experience matters as much as model accuracy</li>
+                    </ul>
+                    
+                    <h4>F1 Insights</h4>
+                    <p><strong>1. Qualifying positions are Key</strong></p>
+                    <ul>
+                        <li>Starting position explains 22% of race outcomes</li>
+                        <li>But 78% comes from other factors - that's where ML added value</li>
+                    </ul>
+                    
+                    <p><strong>2. Form Matters More Than History</strong></p>
+                    <ul>
+                        <li>Recent performance outweighs career statistics (case in point Max verstrappens recent results or Hamilton in Ferrari)</li>
+                        <li>F1 changes so rapidly with new car and engine upgrades so current form dominates</li>
+                    </ul>
+                </section>
+                
+                <section class="project-conclusion">
+                    <h3>🏁 Conclusion</h3>
+                    <p>
+                        Building this F1 prediction system taught me that machine learning isn't just about algorithms - it's about understanding the domain, engineering meaningful features, and creating systems that works.
+                    </p>
+                    <p>
+                        The 91% accuracy isn't just a number - it represents a system that genuinely understands Formula 1's complex dynamics. From Lewis Hamilton's struggles at Ferrari to McLaren's dominance, the model captured the sport's evolving narrative.
+                    </p>
+                    <p>
+                        <strong>Most importantly</strong>: This project proves that with the right approach, even the most unpredictable sports can yield to data science.
+                    </p>
+                </section>
+            </div>
+            
+            <div class="project-footer">
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Machine Learning</span>
+                    <span class="tag">Scikit-learn</span>
+                    <span class="tag">Streamlit</span>
+                    <span class="tag">API Integration</span>
+                    <span class="tag">Data Science</span>
+                    <span class="tag">Random Forest</span>
+                    <span class="tag">Feature Engineering</span>
+                </div>
+                
+                <div class="project-links">
+                    <a href="https://f1-prediction-project.streamlit.app/" class="project-link" target="_blank">Try Live Predictor</a>
+                    <a href="https://github.com/rhianneg/F1-Project" class="project-link" target="_blank">View Source Code</a>
+                </div>
+            </div>
+        </article>
+        
+       
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Rhianne G. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
